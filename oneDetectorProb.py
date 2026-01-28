@@ -1,9 +1,8 @@
 ﻿from manim import *
-from manim_slides import ThreeDSlide
 from PIL import Image
 import math
 import numpy as np
-from beam import * 
+from objects.beam import * 
 
 
 
@@ -15,9 +14,9 @@ class Detector(ThreeDScene):
         self.set_camera_orientation(phi=65*DEGREES, theta=45*DEGREES)
         
         
-        self.counter = ValueTracker(0)
+        self.counter = ValueTracker(40)
         detectorShape = Prism(dimensions=[self.pixelSize,self.pixelSize,self.pixelHeight], fill_opacity=0.5, fill_color=ORANGE, stroke_width=3)
-        detectorCount = Integer(0, color=WHITE, font_size = 120, stroke_width=1.5, stroke_color=BLACK)
+        detectorCount = Integer(40, color=WHITE, font_size = 40, unit="\%", unit_buff_per_font_unit=0.001, stroke_width=1, stroke_color=BLACK)
         detectorCount.shift(self.pixelHeight*OUT/2)
         detectorCount.rotate(PI/2, axis=[0,0,1])
         
@@ -34,8 +33,10 @@ class Detector(ThreeDScene):
             mobj[1].become(
                 Integer(
                     self.counter.get_value(),
-                    color=WHITE, font_size = 120,
-                    stroke_width=1.5, stroke_color=BLACK
+                    color=WHITE, font_size = 40,
+                    unit="\%",
+                    unit_buff_per_font_unit=0.001,
+                    stroke_width=1, stroke_color=BLACK
                 ).rotate(90*DEGREES, OUT) # around z-axis
                 .rotate(theta, UP) # around Y-axis
                 .rotate(phi, OUT) # around Z-axis           
@@ -50,32 +51,17 @@ class Detector(ThreeDScene):
         
         
         phantomCylinder2 = Cylinder(radius = 0.25, height = 2.4, fill_opacity = 0.8, fill_color=WHITE,checkerboard_colors=[BLUE,BLUE], stroke_width = 0)
-        
+        lost = Text("60%")
+        lost.rotate(angle=135*DEGREES, axis=[0,1,0])
+        lost.rotate(angle=90*DEGREES, axis=[1,0,0])
+        lost.shift(3*OUT)
+               
 
         self.add(phantomCylinder2)
-        
-        transmission = Text("Transmission")
-        photoelectrique = Text("Effet photoélectrique")
-        diffusion = Text("Diffusion")
-        text = VGroup(transmission, photoelectrique, diffusion)
-        text.rotate(angle=135*DEGREES, axis=[0,1,0])
-        text.rotate(angle=90*DEGREES, axis=[1,0,0])
-        text.shift(3*OUT)
-        
-        self.play(Write(transmission))
-        self.wait()
-        self.play(Beam(start=[7,0,0], end = [-5,0,0], length=3, counter=self.counter), run_time=3)
-        self.play(FadeOut(transmission))
-        self.wait()
-        self.play(Write(photoelectrique))
-        self.wait()
+                       
+        self.play(Beam(start=[7,0,0], end = [-5,0,0], length=3), run_time=3)
         self.play(Beam(start=[7,0,0], end = [0,0,0], length=3), run_time=1.5)
-        self.play(FadeOut(photoelectrique))
-        self.wait()
-        self.play(Write(diffusion))
-        self.wait()
         self.play(Scattering(start=[7,0,0], end=[-5,2,5], scatteringPoint = [0,0,0], length=3), run_time=3.5)
-        self.play(FadeOut(diffusion))
         self.wait()
-        #self.next_slide()
-        
+        self.play(Write(lost))
+        self.wait()

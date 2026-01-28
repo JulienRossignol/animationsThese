@@ -1,9 +1,8 @@
 ﻿from manim import *
-from manim_slides import ThreeDSlide
 from PIL import Image
 import math
 import numpy as np
-from beam import * 
+from objects.beam import * 
 
 
 class Scanner(ThreeDScene):
@@ -11,21 +10,20 @@ class Scanner(ThreeDScene):
         with Image.open(imageFilepath) as image:         
             smallImage = image.resize((self.panelWidth,self.panelHeight))
             bitmap = smallImage.load()
-            self.imagePixels = []
             for i in range(self.panelWidth):
                 for j in range(self.panelHeight):
                     color = bitmap[i,j]
-                    colorScale = (color/256, color/256, color/256, 1)
-                    manimColor = rgba_to_color(colorScale)
+                    colorScale = (color/255, color/255, color/255)
+                    manimColor = rgb_to_color(colorScale)
                     self.pixels[i*self.panelHeight+j].set_color(manimColor)
-                    self.pixels[i*self.panelHeight+j][1].set_opacity(1)
+                    self.pixels[i*self.panelHeight+j][3].set_opacity(1)
                     
                     
     def construct(self):
         self.pixelHeight = 0.5
-        self.pixelSize = 0.05
-        self.panelWidth = 100
-        self.panelHeight = 100
+        self.pixelSize = 0.1
+        self.panelWidth = 50
+        self.panelHeight = 50
         imagePath = "ctImages/"
         self.sourcePos = [7,0,0]
         
@@ -73,5 +71,4 @@ class Scanner(ThreeDScene):
             self.play(Rotate(ctScanner, DEGREES, about_point=[0,0,0]), run_time=10/360)
                 
         self.wait()
-        #self.next_slide()
         

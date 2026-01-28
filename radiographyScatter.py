@@ -1,9 +1,8 @@
 ﻿from manim import *
-from manim_slides import ThreeDSlide
 from PIL import Image
 import math
 import numpy as np
-from beam import * 
+from objects.beam import * 
 
 
 class Scanner(ThreeDScene):
@@ -30,7 +29,7 @@ class Scanner(ThreeDScene):
         self.panelWidth = 20
         self.panelHeight = 20
         self.sourcePos = [7,0,0]
-        imagePath = "phantom.PNG"
+        imagePath = "images/phantom.PNG"
         
         self.set_camera_orientation(phi=65*DEGREES, theta=45*DEGREES)
         #self.set_camera_orientation(phi=0*DEGREES, theta=0*DEGREES)
@@ -75,5 +74,4 @@ class Scanner(ThreeDScene):
         self.add(detector, phantom, source)
         self.play(AnimationGroup(*[Scattering(start=self.sourcePos, scatteringPoint=[0,0,0], end=pixel.get_center(), length=3) for pixel in self.imagePixels], lag_ratio=0,rate_func=linear, run_time=10))
         self.wait()
-        #self.next_slide()
         

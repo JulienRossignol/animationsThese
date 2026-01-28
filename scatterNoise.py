@@ -1,9 +1,8 @@
 ﻿from manim import *
-from manim_slides import ThreeDSlide
 from PIL import Image
 import math
 import numpy as np
-from beam import * 
+from objects.beam import * 
 from random import *
 
 
@@ -76,13 +75,14 @@ class Detector(ThreeDScene):
         self.add(phantomCylinder1)
         self.add(phantomCylinder2)
         
-        os = Text("Os")
-        eau = Text("Eau", color = BLUE)
+        os = Text("Bone")
+        eau = Text("Water", color = BLUE)
         text = VGroup(os, eau)
         text.rotate(angle=135*DEGREES, axis=[0,1,0])
         text.rotate(angle=90*DEGREES, axis=[1,0,0])
         text.shift(2*OUT)
         os.shift(0.8*UP)
+        os.shift(0.2*IN)
         eau.shift(0.8*DOWN)
         
         self.add(text)
@@ -95,6 +95,5 @@ class Detector(ThreeDScene):
         self.wait()
         self.play(Scattering(start=[7,0.8,0], scatteringPoint=phantomCylinder1.get_center(), end=detectorCount2.get_center(), counter=counter2, length = 5), run_time=5)  
         self.wait()
-        
-        #self.next_slide()
+
         
